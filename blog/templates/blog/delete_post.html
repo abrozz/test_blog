@@ -40,35 +40,14 @@
 <body>
 <div class="container">
 	<div class="row clearfix">
-		<div class="col-md-12 column">
-            <h3>Список Постов</h3>
-			<div class="panel-group" id="panel-641668">
-            {% for post in post_list %}
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						 <a class="panel-title" data-toggle="collapse" data-parent="#panel-641668" href="#{{ post.id }}">{{ post.title }}</a>
-					</div>
-					<div id="{{ post.id }}" {% if not forloop.first %}class="panel-collapse collapse"{% else %}class="panel-collapse in" {% endif %}>
-						<div class="panel-body">
-                            {{ post.message }}
-                            <div class="text-right">
+		<form class="col-md-12 column" method="post">
+            <p class="bg-warning">Вы уверены что хотите удалить запись ?</p>
+                {% csrf_token %}
 
-                                <a class="btn btn-default" href="/blog/{{ post.id }}" role="button"><span class="glyphicon glyphicon-pencil" aria-hidden="true"> Редактировать</span></a>
-                                <a class="btn btn-default" href="delete_post/{{ post.id }}" role="button"><span class="glyphicon glyphicon-trash" aria-hidden="true"> Удалить запись</span></a>
 
-                            </div>
-                            <p class="text-nowrap text-info">Опубликовано {{ post.dtc }}</p>
-                        </div>
-					</div>
-				</div>
-            {% endfor %}
-
-        <div class="btn-group">
-            <a class="btn btn-default" href="add" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"> Добавить запись</span></a>
-        </div>
-		</div>
-
+            <a class="btn btn-default" href="/blog/" role="button">Отменить</a>
+                <button type="submit" value="delete" class="btn btn-default">Удалить</button>
+			</form>
 	</div>
 </div>
 </body>
-
