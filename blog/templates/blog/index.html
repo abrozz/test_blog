@@ -53,8 +53,8 @@
                             {{ post.message }}
                             <div class="text-right">
 
-                                <a class="btn btn-default" href="/blog/{{ post.id }}" role="button"><span class="glyphicon glyphicon-pencil" aria-hidden="true"> Редактировать</span></a>
-                                <a class="btn btn-default" href="delete_post/{{ post.id }}" role="button"><span class="glyphicon glyphicon-trash" aria-hidden="true"> Удалить запись</span></a>
+                                <a class="btn btn-default" href="/blog/{{ post.id }}/edit/" role="button"><span class="glyphicon glyphicon-pencil" aria-hidden="true"> Редактировать</span></a>
+                                <a class="btn btn-default" href="/blog/{{ post.id }}/delete_post/" role="button"><span class="glyphicon glyphicon-trash" aria-hidden="true"> Удалить запись</span></a>
 
                             </div>
                             <p class="text-nowrap text-info">Опубликовано {{ post.dtc }}</p>
