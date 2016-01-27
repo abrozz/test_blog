@@ -2,7 +2,8 @@
 import datetime
 from django.db import models
 from django.utils import timezone
-from django.forms import ModelForm, forms
+from django.core.urlresolvers import reverse
+
 
 class Post(models.Model):
     title = models.CharField(max_length=255, verbose_name=u'Заголовок')
@@ -16,5 +17,7 @@ class Post(models.Model):
         return self.dtc >= timezone.now() - datetime.timedelta(days=1)
     def modification(self):
         return self.dtm >= timezone.now()
+    def get_absolute_url(self):
+        return reverse('index', kwargs={'pk': self.pk})
 
 

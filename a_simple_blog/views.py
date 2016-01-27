@@ -1,53 +1,40 @@
 from django.http import HttpResponseRedirect
 from .models import Post
 from .forms import post_forms
-from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
+from django.views.generic import ListView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 
-def index(request):
+class PublisherList(ListView):
+    model = Post
+    template_name = 'blog/index.html'
+    queryset = Post.objects.order_by('-id')[:20]
+    context_object_name = 'post_list'
 
-    post_list = Post.objects.order_by('-id')[:20]
-    context = {'post_list': post_list}
-
-
-    return render(request, 'blog/index.html', context)
-
-
-
-def add(request):
-    if request.method == 'POST':
-        form = post_forms(request.POST)
-        if form.is_valid():
-            p = form.save(commit=False)
-            p.title = (request.POST ['title'])
-            p.dtc = timezone.now()
-            p.save()
-            return HttpResponseRedirect('/blog/')
-    else:
-
-        formset = post_forms()
-        return render(request, 'blog/add.html', {'formset': formset})
-
-def edit(request, id):
-     a = Post.objects.get(pk=id)
-     if request.method == 'POST':
-         form = post_forms(request.POST, instance=a)
-         if form.is_valid():
-            p = form.save(commit=False)
-            p.title = (request.POST ['title'])
-            p.dtm=timezone.now()
-            p.save()
-            return HttpResponseRedirect('/blog/')
-     else:
-         formset = post_forms(instance=a)
-         return render(request, 'blog/edit.html', {'formset': formset})
-
-def delete_post(request, id):
-    a = Post.objects.get(pk=id)
-    if request.method == 'POST':
-        p = Post.objects.get(pk=id)
-        p.delete()
+class PostCreate(CreateView):
+    form_class = post_forms
+    model = Post
+    template_name = 'blog/add.html'
+    context_object_name = 'formset'
+    def form_valid(self, form):
+        p = form.save(commit=False)
+        p.dtc = timezone.now()
+        p.save()
         return HttpResponseRedirect('/blog/')
-    else:
-        return render(request, 'blog/delete_post.html')
+
+class PostUpdate(UpdateView):
+    form_class = post_forms
+    model = Post
+    template_name = 'blog/edit.html'
+    def form_valid(self, form):
+        p = form.save(commit=False)
+        p.dtm = timezone.now()
+        p.save()
+        return HttpResponseRedirect('/blog/')
+
+class PostDelete(DeleteView):
+    form_class = post_forms
+    model = Post
+    template_name = 'blog/delete_post.html'
+    success_url = ('/blog/')
